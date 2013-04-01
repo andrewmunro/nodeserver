@@ -42,7 +42,7 @@ function onClientDisconnect()
 	};
 
     players.splice(players.indexOf(player), 1);
-    this.broadcast.emit("disconnect",
+    this.broadcast.emit("playerDisconnect",
     {
     	id: player.id
     })
@@ -52,7 +52,7 @@ function onPlayerNew(data)
 {
 	var player = new Player(data.x, data.y, data.z, data.r);
 	player.id = this.id;
-	util.log("NewPlayer X:" + player.x + " Y:" + player.y + " Z: "+player.z + " R: " + player.r);
+	util.log("NewPlayer X:" + player.getX() + " Y:" + player.getY() + " Z: "+player.getZ() + " R: " + player.getR());
 
 	//Send this player to existing clients (this.broadcast.emit = all clients except this)
 	this.broadcast.emit("playerNew", 
@@ -67,7 +67,6 @@ function onPlayerNew(data)
 	//Send existing clients to this player (this.emit = only this client)
 	for (var i = 0; i < players.length; i++) 
 	{
-		util.log("sending player");
 	    this.emit("playerNew", 
 	    	{
 	    		id: players[i].id, 
@@ -103,7 +102,7 @@ function onPlayerMove(data)
 			z: player.getZ(),
 			r: player.getR()
 		});
-	util.log("R: " + player.getR());
+	//util.log("R: " + player.getR());
 
 };
 
