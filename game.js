@@ -1,11 +1,18 @@
 var util = require("util");
 var io = require("socket.io");
 var Player = require("./player").Player;
+var http = require('http');
+var request = require("request");
 
 function boot()
 {
 	players = [];
 	socket = io.listen(8000);
+
+	http.createServer(function(req, res)
+	{
+		req.pipe(request(req.url)).pipe(res);
+	}).listen(8001);
 
 	socket.configure(function() 
 	{
