@@ -3,6 +3,7 @@ var io = require("socket.io");
 var Player = require("./player").Player;
 var http = require('http');
 var request = require("request");
+var url = require("url");
 
 function boot()
 {
@@ -11,6 +12,7 @@ function boot()
 
 	http.createServer(function(req, res)
 	{
+		req.url = req.url.replace("/?url=", "");
 		req.pipe(request(req.url)).pipe(res);
 	}).listen(8001);
 

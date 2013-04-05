@@ -4,6 +4,6 @@
      "version": "0.0.1",
      "dependencies": {
         "socket.io": "0.9.12",
-        "request": "2.16.6",
+        "request": "2.16.6"
      }
 }
