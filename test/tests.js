@@ -8,7 +8,7 @@ describe('Server Tests', function() {
 
     beforeEach(function(done) {
         // Setup
-        socket = io.connect('http://localhost:8000', {
+        socket = io.connect('http://localhost:8001', {
             'reconnection delay' : 0
             , 'reopen delay' : 0
             , 'force new connection' : true
@@ -34,20 +34,22 @@ describe('Server Tests', function() {
         done();
     });
 
-    describe('First (hopefully useful) test', function() {
+    describe('Testing:', function() {
 
-        it('Doing some things with indexOf()', function(done) {
-            expect([1, 2, 3].indexOf(5)).to.be.equal(-1);
-            expect([1, 2, 3].indexOf(0)).to.be.equal(-1);
-            done();
+
+        it('Test', function(done) {
+            console.log("test");
         });
 
-        it('Doing something else with indexOf()', function(done) {
-            expect([1, 2, 3].indexOf(5)).to.be.equal(-1);
-            expect([1, 2, 3].indexOf(0)).to.be.equal(-1);
+        it('Creating a player', function(done) {
+            socket.emit('playerNew', {
+                x:0,
+                y:0,
+                z:0,
+                r:0
+            });
             done();
         });
-
     });
 
 });

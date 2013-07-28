@@ -1,4 +1,4 @@
-var Player = function(startX, startY, startZ, startR) 
+exports.Player = function(startX, startY, startZ, startR) 
 {
     var x = startX,
         y = startY,
@@ -47,7 +47,6 @@ var Player = function(startX, startY, startZ, startR)
     };
 
     return {
-        
         getX: getX,
         getY: getY,
         getZ: getZ,
@@ -58,6 +57,4 @@ var Player = function(startX, startY, startZ, startR)
         setR: setR,
         id: id
     }
-};
-
-exports.Player = Player;
+}

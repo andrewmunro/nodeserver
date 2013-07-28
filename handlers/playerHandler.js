@@ -1,30 +1,28 @@
-exports.onSocketConnection = function(client) 
-{
-    util.log("New player has connected: "+client.id);
-    client.on("disconnect", onClientDisconnect);
-    client.on("playerNew", onPlayerNew);
-    client.on("playerMove", onPlayerMove);
-}
+var util = require("util");
+var playerManager = require("../managers/playerManager").PlayerManager;
+var Player = require("../components/player").Player;
+var playerManagerInstance = new playerManager();
 
-function onClientDisconnect() 
+exports.onClientDisconnect = function(data)
 {
-	var player = getPlayerById(this.id);
+	var player = playerManagerInstance.getPlayerById(this.id);
 	util.log("Player has disconnected: "+player.id);
+	util.log(playerManagerInstance.players);
 
 	// Player not found
 	if (!player) {
-		util.log("Player not found: "+this.id);
+		util.error("Player not found: "+this.id);
 		return;
 	};
 
-    players.splice(players.indexOf(player), 1);
+	playerManagerInstance.removePlayer(player)
     this.broadcast.emit("playerDisconnect",
     {
     	id: player.id
     })
-}
+};
 
-function onPlayerNew(data)
+exports.onPlayerNew = function(data)
 {
 	var player = new Player(data.x, data.y, data.z, data.r);
 	player.id = this.id;
@@ -41,7 +39,7 @@ function onPlayerNew(data)
 	});
 
 	//Send existing clients to this player (this.emit = only this client)
-	for (var i = 0; i < players.length; i++) 
+	for (var i = 0; i < playerManagerInstance.players.length; i++) 
 	{
 	    this.emit("playerNew", 
 	    	{
@@ -53,12 +51,12 @@ function onPlayerNew(data)
 	    	});
 	};
 
-	players.push(player);
-}
+	playerManagerInstance.addPlayer(player);
+};
 
-function onPlayerMove(data) 
+exports.onPlayerMove = function(data)
 {
-	var player = getPlayerById(this.id);
+	var player = playerManagerInstance.getPlayerById(this.id);
 	if (!player) 
 	{
 		util.log("Player not found: "+this.id);
@@ -78,15 +76,4 @@ function onPlayerMove(data)
 			z: player.getZ(),
 			r: player.getR()
 		});
-	//util.log("R: " + player.getR());
-}
-
-function getPlayerById(id) 
-{
-    for (var i = 0; i < players.length; i++) 
-    {
-        if (players[i].id == id)
-            return players[i];
-    };
-    return false;
-}
+};
